@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { body, validationResult } from 'express-validator';
+import Programacion from '../models/Programacion.js';
+import auth from '../middleware/auth.js';
+
 const router = express.Router();
-const Programacion = require('../models/Programacion');
-const auth = require('../middleware/auth');
-const { body, validationResult } = require('express-validator');
 
 // Validaciones para crear/actualizar programación
 const programacionValidation = [
@@ -364,4 +365,4 @@ router.get('/day/:day', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

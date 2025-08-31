@@ -86,3 +86,6 @@ export const checkPermission = (permission) => {
     next();
   };
 };
+
+// Export por defecto para compatibilidad
+export default protect;
