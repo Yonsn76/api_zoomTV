@@ -17,6 +17,7 @@ import usuariosRoutes from './routes/usuarios.js';
 import mediaRoutes from './routes/media.js';
 import authRoutes from './routes/auth.js';
 import programacionRoutes from './routes/programacion.js';
+import anunciantesRoutes from './routes/anunciantes.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -77,6 +78,7 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/programacion', programacionRoutes);
+app.use('/api/anunciantes', anunciantesRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
