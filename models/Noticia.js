@@ -158,3 +158,4 @@ noticiaSchema.statics.search = function(query, limit = 10) {
 const Noticia = mongoose.model('Noticia', noticiaSchema);
 
 export default Noticia;
+

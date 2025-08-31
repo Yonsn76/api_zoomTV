@@ -132,3 +132,4 @@ usuarioSchema.statics.getByRole = function(role) {
 const Usuario = mongoose.model('Usuario', usuarioSchema);
 
 export default Usuario;
+
