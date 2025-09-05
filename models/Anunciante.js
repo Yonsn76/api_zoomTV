@@ -91,3 +91,5 @@ anuncianteSchema.index({ status: 1, priority: 1 });
 anuncianteSchema.index({ category: 1 });
 
 export default mongoose.model('Anunciante', anuncianteSchema);
+
+
