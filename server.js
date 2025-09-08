@@ -19,6 +19,7 @@ import authRoutes from './routes/auth.js';
 import programacionRoutes from './routes/programacion.js';
 import anunciantesRoutes from './routes/anunciantes.js';
 import companyRoutes from './routes/company.js';
+import transmisionesRoutes from './routes/transmisiones.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -81,6 +82,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/programacion', programacionRoutes);
 app.use('/api/anunciantes', anunciantesRoutes);
 app.use('/api/company', companyRoutes);
+app.use('/api/transmisiones', transmisionesRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
