@@ -158,3 +158,6 @@ public/uploads/
 # Optional: Uncomment for IDE
 # .vscode/
 # .idea/
+
+# Scripts directory
+scripts/

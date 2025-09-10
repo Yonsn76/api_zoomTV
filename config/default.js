@@ -2,7 +2,7 @@
 export default {
   // MongoDB Connection
   mongodb: {
-    uri: process.env.MONGODB_URI || 'mongodb+srv://yonsn:1234@cluster0.7imrsfw.mongodb.net/zoom_tv_cms'
+    uri: process.env.MONGODB_URI || 'mongodb+srv://zoom10:zoom10@zoomtv.km2jqca.mongodb.net/?retryWrites=true&w=majority&appName=zoomtv'
   },
 
   // Server Configuration

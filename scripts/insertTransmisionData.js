@@ -9,124 +9,39 @@ dotenv.config({ path: './config.env' });
 // Datos de ejemplo para transmisiones
 const transmisionesEjemplo = [
   {
-    title: "Noticias 24/7 - Canal Principal",
-    description: "Transmisión continua de noticias nacionales e internacionales las 24 horas del día",
-    streamUrl: "https://example.com/streams/noticias-24.m3u8",
-    streamType: "HLS",
+    nombre: "Noticias 24/7 - Canal Principal",
+    url: "https://example.com/streams/noticias-24.m3u8",
     isActive: true,
     isLive: true,
-    category: "Noticias",
-    quality: "HD",
-    tags: ["noticias", "24-horas", "nacional", "internacional"],
-    playerConfig: {
-      autoplay: false,
-      muted: true,
-      controls: true,
-      loop: false,
-      volume: 0.5
-    },
-    stats: {
-      views: 15420,
-      maxConcurrentViewers: 1250,
-      lastViewed: new Date().toISOString()
-    },
     createdBy: null // Se asignará dinámicamente
   },
   {
-    title: "Deportes en Vivo - Fútbol",
-    description: "Transmisión de partidos de fútbol nacional e internacional",
-    streamUrl: "https://example.com/streams/deportes-futbol.m3u8",
-    streamType: "HLS",
+    nombre: "Deportes en Vivo - Fútbol",
+    url: "https://example.com/streams/deportes-futbol.m3u8",
     isActive: true,
     isLive: false,
-    category: "Deportes",
-    quality: "FHD",
-    tags: ["deportes", "futbol", "en-vivo", "partidos"],
-    playerConfig: {
-      autoplay: false,
-      muted: false,
-      controls: true,
-      loop: false,
-      volume: 0.7
-    },
-    stats: {
-      views: 8930,
-      maxConcurrentViewers: 2100,
-      lastViewed: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 horas atrás
-    },
-    createdBy: new mongoose.Types.ObjectId()
+    createdBy: null // Se asignará dinámicamente
   },
   {
-    title: "Música Clásica - Radio Zoom",
-    description: "Transmisión de música clásica y instrumental las 24 horas",
-    streamUrl: "https://example.com/streams/musica-clasica.m3u8",
-    streamType: "HLS",
+    nombre: "Música Clásica - Radio Zoom",
+    url: "https://example.com/streams/musica-clasica.m3u8",
     isActive: true,
     isLive: true,
-    category: "Música",
-    quality: "SD",
-    tags: ["musica", "clasica", "instrumental", "relajante"],
-    playerConfig: {
-      autoplay: true,
-      muted: false,
-      controls: true,
-      loop: true,
-      volume: 0.6
-    },
-    stats: {
-      views: 5670,
-      maxConcurrentViewers: 450,
-      lastViewed: new Date().toISOString()
-    },
-    createdBy: new mongoose.Types.ObjectId()
+    createdBy: null // Se asignará dinámicamente
   },
   {
-    title: "Entretenimiento - Shows y Programas",
-    description: "Transmisión de programas de entretenimiento, talk shows y eventos especiales",
-    streamUrl: "https://example.com/streams/entretenimiento.m3u8",
-    streamType: "HLS",
+    nombre: "Entretenimiento - Shows y Programas",
+    url: "https://example.com/streams/entretenimiento.m3u8",
     isActive: true,
     isLive: false,
-    category: "Entretenimiento",
-    quality: "HD",
-    tags: ["entretenimiento", "shows", "talk-shows", "eventos"],
-    playerConfig: {
-      autoplay: false,
-      muted: true,
-      controls: true,
-      loop: false,
-      volume: 0.5
-    },
-    stats: {
-      views: 12340,
-      maxConcurrentViewers: 890,
-      lastViewed: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString() // 4 horas atrás
-    },
-    createdBy: new mongoose.Types.ObjectId()
+    createdBy: null // Se asignará dinámicamente
   },
   {
-    title: "Documentales - Canal Educativo",
-    description: "Transmisión de documentales educativos y programas culturales",
-    streamUrl: "https://example.com/streams/documentales.m3u8",
-    streamType: "HLS",
+    nombre: "Documentales - Canal Educativo",
+    url: "https://example.com/streams/documentales.m3u8",
     isActive: false,
     isLive: false,
-    category: "Documentales",
-    quality: "HD",
-    tags: ["documentales", "educativo", "cultural", "aprendizaje"],
-    playerConfig: {
-      autoplay: false,
-      muted: true,
-      controls: true,
-      loop: false,
-      volume: 0.5
-    },
-    stats: {
-      views: 3450,
-      maxConcurrentViewers: 180,
-      lastViewed: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 1 día atrás
-    },
-    createdBy: new mongoose.Types.ObjectId()
+    createdBy: null // Se asignará dinámicamente
   }
 ];
 
@@ -161,7 +76,7 @@ const getOrCreateUser = async () => {
         password: 'password123', // Se hasheará automáticamente
         fullName: 'Administrador Transmisiones',
         role: 'admin',
-        permissions: ['read', 'write', 'delete']
+        permissions: ['read', 'create', 'update', 'delete']
       });
       
       await user.save();
@@ -211,16 +126,13 @@ const insertTransmisionesEjemplo = async () => {
     
     // Mostrar resumen de las transmisiones insertadas
     transmisionesInsertadas.forEach((transmision, index) => {
-      console.log(`\n${index + 1}. ${transmision.title}`);
-      console.log(`   📡 Categoría: ${transmision.category}`);
+      console.log(`\n${index + 1}. ${transmision.nombre}`);
+      console.log(`   🔗 URL: ${transmision.url}`);
       console.log(`   🔴 En Vivo: ${transmision.isLive ? 'Sí' : 'No'}`);
       console.log(`   ✅ Activo: ${transmision.isActive ? 'Sí' : 'No'}`);
-      console.log(`   👀 Vistas: ${transmision.stats.views.toLocaleString()}`);
-      console.log(`   🎯 Calidad: ${transmision.quality}`);
     });
     
     // Mostrar estadísticas generales
-    const totalViews = transmisionesInsertadas.reduce((sum, t) => sum + t.stats.views, 0);
     const transmisionesActivas = transmisionesInsertadas.filter(t => t.isActive).length;
     const transmisionesEnVivo = transmisionesInsertadas.filter(t => t.isLive).length;
     
@@ -228,7 +140,6 @@ const insertTransmisionesEjemplo = async () => {
     console.log(`   📺 Total transmisiones: ${transmisionesInsertadas.length}`);
     console.log(`   ✅ Transmisiones activas: ${transmisionesActivas}`);
     console.log(`   🔴 Transmisiones en vivo: ${transmisionesEnVivo}`);
-    console.log(`   👀 Total de vistas: ${totalViews.toLocaleString()}`);
     
   } catch (error) {
     console.error('❌ Error insertando transmisiones de ejemplo:', error.message);
