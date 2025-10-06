@@ -60,8 +60,8 @@ router.get('/:id', async (req, res) => {
 
 // @desc    Crear categoría
 // @route   POST /api/categorias
-// @access  Private (Admin only)
-router.post('/', protect, authorize('admin'), [
+// @access  Public
+router.post('/', [
   body('name').notEmpty().withMessage('Nombre es requerido'),
   body('description').optional().trim(),
   body('color').optional().trim(),
@@ -112,8 +112,8 @@ router.post('/', protect, authorize('admin'), [
 
 // @desc    Actualizar categoría
 // @route   PUT /api/categorias/:id
-// @access  Private (Admin only)
-router.put('/:id', protect, authorize('admin'), [
+// @access  Public
+router.put('/:id', [
   body('name').optional().notEmpty().withMessage('Nombre no puede estar vacío'),
   body('description').optional().trim(),
   body('color').optional().trim(),
@@ -178,8 +178,8 @@ router.put('/:id', protect, authorize('admin'), [
 
 // @desc    Eliminar categoría
 // @route   DELETE /api/categorias/:id
-// @access  Private (Admin only)
-router.delete('/:id', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.delete('/:id', async (req, res) => {
   try {
     const categoria = await Categoria.findOne({ 
       $or: [

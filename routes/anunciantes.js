@@ -89,10 +89,8 @@ router.get('/:id', async (req, res) => {
 
 // @desc    Crear nuevo anunciante
 // @route   POST /api/anunciantes
-// @access  Private
+// @access  Public
 router.post('/', [
-  protect,
-  authorize('admin', 'editor'),
   body('name').trim().isLength({ min: 1 }).withMessage('El nombre es requerido'),
   body('imageUrl').trim().isURL().withMessage('La URL de la imagen es requerida y debe ser válida'),
   body('description').optional().trim(),
@@ -135,10 +133,8 @@ router.post('/', [
 
 // @desc    Actualizar anunciante
 // @route   PUT /api/anunciantes/:id
-// @access  Private
+// @access  Public
 router.put('/:id', [
-  protect,
-  authorize('admin', 'editor'),
   body('name').optional().trim().isLength({ min: 1 }).withMessage('El nombre debe tener al menos 1 carácter'),
   body('imageUrl').optional().trim().isURL().withMessage('La URL de la imagen debe ser válida'),
   body('description').optional().trim(),
@@ -192,10 +188,8 @@ router.put('/:id', [
 
 // @desc    Eliminar anunciante
 // @route   DELETE /api/anunciantes/:id
-// @access  Private
+// @access  Public
 router.delete('/:id', [
-  protect,
-  authorize('admin')
 ], async (req, res) => {
   try {
     const anunciante = await Anunciante.findByIdAndDelete(req.params.id);
@@ -222,10 +216,8 @@ router.delete('/:id', [
 
 // @desc    Cambiar estado del anunciante
 // @route   PUT /api/anunciantes/:id/status
-// @access  Private
+// @access  Public
 router.put('/:id/status', [
-  protect,
-  authorize('admin', 'editor'),
   body('status').isIn(['active', 'inactive', 'pending']).withMessage('Estado inválido')
 ], async (req, res) => {
   try {
@@ -265,10 +257,8 @@ router.put('/:id/status', [
 
 // @desc    Reordenar anunciantes
 // @route   PUT /api/anunciantes/reorder
-// @access  Private
+// @access  Public
 router.put('/reorder', [
-  protect,
-  authorize('admin', 'editor'),
   body('anunciantes').isArray().withMessage('Debe ser un array de anunciantes'),
   body('anunciantes.*.id').isMongoId().withMessage('ID de anunciante inválido'),
   body('anunciantes.*.priority').isInt({ min: 0 }).withMessage('Prioridad inválida')

@@ -37,8 +37,8 @@ const upload = multer({
 
 // @desc    Listar todos los archivos
 // @route   GET /api/media
-// @access  Private
-router.get('/', protect, async (req, res) => {
+// @access  Public
+router.get('/', async (req, res) => {
   try {
     const { search, type } = req.query;
 
@@ -107,8 +107,8 @@ router.get('/', protect, async (req, res) => {
 
 // @desc    Subir archivo
 // @route   POST /api/media/upload
-// @access  Private
-router.post('/upload', protect, upload.single('file'), [
+// @access  Public
+router.post('/upload', upload.single('file'), [
   body('alt').optional().trim(),
   body('caption').optional().trim()
 ], async (req, res) => {
@@ -188,8 +188,8 @@ router.post('/upload', protect, upload.single('file'), [
 
 // @desc    Subir múltiples archivos
 // @route   POST /api/media/upload-multiple
-// @access  Private
-router.post('/upload-multiple', protect, upload.array('files', 100), [
+// @access  Public
+router.post('/upload-multiple', upload.array('files', 100), [
   body('alt').optional().trim(),
   body('caption').optional().trim()
 ], async (req, res) => {
@@ -271,8 +271,8 @@ router.post('/upload-multiple', protect, upload.array('files', 100), [
 
 // @desc    Eliminar archivo
 // @route   DELETE /api/media/:filename
-// @access  Private
-router.delete('/:filename', protect, async (req, res) => {
+// @access  Public
+router.delete('/:filename', async (req, res) => {
   try {
     const { filename } = req.params;
 

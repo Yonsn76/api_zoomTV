@@ -7,8 +7,8 @@ const router = express.Router();
 
 // @desc    Obtener todos los usuarios
 // @route   GET /api/usuarios
-// @access  Private (Admin only)
-router.get('/', protect, authorize('admin'), [
+// @access  Public
+router.get('/', [
   query('role').optional().isIn(['admin', 'editor', 'author']).withMessage('Rol inválido'),
   query('active').optional().isBoolean().withMessage('Active debe ser booleano')
 ], async (req, res) => {
@@ -54,8 +54,8 @@ router.get('/', protect, authorize('admin'), [
 
 // @desc    Obtener usuario por ID
 // @route   GET /api/usuarios/:id
-// @access  Private (Admin only)
-router.get('/:id', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.get('/:id', async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.params.id).select('-password');
 
@@ -81,8 +81,8 @@ router.get('/:id', protect, authorize('admin'), async (req, res) => {
 
 // @desc    Actualizar usuario
 // @route   PUT /api/usuarios/:id
-// @access  Private (Admin only)
-router.put('/:id', protect, authorize('admin'), [
+// @access  Public
+router.put('/:id', [
   body('username').optional().isLength({ min: 3 }).withMessage('El nombre de usuario debe tener al menos 3 caracteres'),
   body('email').optional().isEmail().withMessage('Email inválido'),
   body('role').optional().isIn(['admin', 'editor', 'author']).withMessage('Rol inválido'),
@@ -169,8 +169,8 @@ router.put('/:id', protect, authorize('admin'), [
 
 // @desc    Eliminar usuario
 // @route   DELETE /api/usuarios/:id
-// @access  Private (Admin only)
-router.delete('/:id', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.delete('/:id', async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.params.id);
 
@@ -206,8 +206,8 @@ router.delete('/:id', protect, authorize('admin'), async (req, res) => {
 
 // @desc    Activar/Desactivar usuario
 // @route   PUT /api/usuarios/:id/toggle-status
-// @access  Private (Admin only)
-router.put('/:id/toggle-status', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.put('/:id/toggle-status', async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.params.id);
 

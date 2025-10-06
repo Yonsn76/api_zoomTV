@@ -177,8 +177,8 @@ router.get('/search/search', [
 
 // @desc    Crear noticia
 // @route   POST /api/noticias
-// @access  Private
-router.post('/', protect, checkPermission('create'), [
+// @access  Public
+router.post('/', [
   body('id').notEmpty().withMessage('ID es requerido'),
   body('title').notEmpty().withMessage('Título es requerido'),
   body('author').notEmpty().withMessage('Autor es requerido'),
@@ -239,8 +239,8 @@ router.post('/', protect, checkPermission('create'), [
 
 // @desc    Actualizar noticia
 // @route   PUT /api/noticias/:id
-// @access  Private
-router.put('/:id', protect, checkPermission('update'), [
+// @access  Public
+router.put('/:id', [
   body('title').optional().notEmpty().withMessage('Título no puede estar vacío'),
   body('summary').optional().notEmpty().withMessage('Resumen no puede estar vacío'),
   body('content').optional().notEmpty().withMessage('Contenido no puede estar vacío'),
@@ -303,8 +303,8 @@ router.put('/:id', protect, checkPermission('update'), [
 
 // @desc    Eliminar noticia
 // @route   DELETE /api/noticias/:id
-// @access  Private
-router.delete('/:id', protect, checkPermission('delete'), async (req, res) => {
+// @access  Public
+router.delete('/:id', async (req, res) => {
   try {
     const noticia = await Noticia.findOne({ 
       $or: [
@@ -337,8 +337,8 @@ router.delete('/:id', protect, checkPermission('delete'), async (req, res) => {
 
 // @desc    Publicar noticia
 // @route   PUT /api/noticias/:id/publish
-// @access  Private
-router.put('/:id/publish', protect, checkPermission('publish'), async (req, res) => {
+// @access  Public
+router.put('/:id/publish', async (req, res) => {
   try {
     const noticia = await Noticia.findOne({ 
       $or: [
@@ -372,8 +372,8 @@ router.put('/:id/publish', protect, checkPermission('publish'), async (req, res)
 
 // @desc    Archivar noticia
 // @route   PUT /api/noticias/:id/archive
-// @access  Private
-router.put('/:id/archive', protect, checkPermission('update'), async (req, res) => {
+// @access  Public
+router.put('/:id/archive', async (req, res) => {
   try {
     const noticia = await Noticia.findOne({ 
       $or: [

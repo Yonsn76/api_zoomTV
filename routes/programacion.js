@@ -158,7 +158,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST /api/programacion - Crear nuevo programa
-router.post('/', auth, programacionValidation, async (req, res) => {
+router.post('/', programacionValidation, async (req, res) => {
   try {
     // Verificar errores de validación
     const errors = validationResult(req);
@@ -213,7 +213,7 @@ router.post('/', auth, programacionValidation, async (req, res) => {
 });
 
 // PUT /api/programacion/:id - Actualizar programa
-router.put('/:id', auth, programacionValidation, async (req, res) => {
+router.put('/:id', programacionValidation, async (req, res) => {
   try {
     // Verificar errores de validación
     const errors = validationResult(req);
@@ -274,7 +274,7 @@ router.put('/:id', auth, programacionValidation, async (req, res) => {
 });
 
 // DELETE /api/programacion/:id - Eliminar programa
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const programacion = await Programacion.findById(req.params.id);
     
@@ -302,7 +302,7 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 // PATCH /api/programacion/:id/toggle - Activar/desactivar programa
-router.patch('/:id/toggle', auth, async (req, res) => {
+router.patch('/:id/toggle', async (req, res) => {
   try {
     const programacion = await Programacion.findById(req.params.id);
     

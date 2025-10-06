@@ -87,8 +87,8 @@ router.get('/:id', async (req, res) => {
 
 // @desc    Crear nueva transmisión
 // @route   POST /api/transmisiones
-// @access  Private/Admin
-router.post('/', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.post('/', async (req, res) => {
   try {
     const { nombre, url } = req.body;
 
@@ -124,8 +124,8 @@ router.post('/', protect, authorize('admin'), async (req, res) => {
 
 // @desc    Actualizar transmisión
 // @route   PUT /api/transmisiones/:id
-// @access  Private/Admin
-router.put('/:id', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.put('/:id', async (req, res) => {
   try {
     const { nombre, url } = req.body;
 
@@ -161,8 +161,8 @@ router.put('/:id', protect, authorize('admin'), async (req, res) => {
 
 // @desc    Lanzar transmisión en vivo
 // @route   PUT /api/transmisiones/:id/live
-// @access  Private/Admin
-router.put('/:id/live', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.put('/:id/live', async (req, res) => {
   try {
     const transmision = await Transmision.findById(req.params.id);
     
@@ -193,8 +193,8 @@ router.put('/:id/live', protect, authorize('admin'), async (req, res) => {
 
 // @desc    Detener transmisión en vivo
 // @route   PUT /api/transmisiones/:id/stop
-// @access  Private/Admin
-router.put('/:id/stop', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.put('/:id/stop', async (req, res) => {
   try {
     const transmision = await Transmision.findById(req.params.id);
     
@@ -225,8 +225,8 @@ router.put('/:id/stop', protect, authorize('admin'), async (req, res) => {
 
 // @desc    Eliminar transmisión
 // @route   DELETE /api/transmisiones/:id
-// @access  Private/Admin
-router.delete('/:id', protect, authorize('admin'), async (req, res) => {
+// @access  Public
+router.delete('/:id', async (req, res) => {
   try {
     const transmision = await Transmision.findById(req.params.id);
     
