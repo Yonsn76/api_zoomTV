@@ -29,7 +29,7 @@ const transmisionSchema = new mongoose.Schema({
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Usuario',
-    required: true
+    required: false
   }
 }, {
   timestamps: true

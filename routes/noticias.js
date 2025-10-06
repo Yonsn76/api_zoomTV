@@ -1,7 +1,7 @@
 import express from 'express';
 import { body, validationResult, query } from 'express-validator';
 import Noticia from '../models/Noticia.js';
-import { protect, authorize, checkPermission } from '../middleware/auth.js';
+// import { protect, authorize, checkPermission } from '../middleware/auth.js'; // Deshabilitado - endpoints públicos
 
 const router = express.Router();
 

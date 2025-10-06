@@ -1,7 +1,7 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import Categoria from '../models/Categoria.js';
-import { protect, authorize } from '../middleware/auth.js';
+// import { protect, authorize } from '../middleware/auth.js'; // Deshabilitado - endpoints públicos
 
 const router = express.Router();
 

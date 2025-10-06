@@ -1,7 +1,7 @@
 import express from 'express';
 import { body, validationResult, query } from 'express-validator';
 import Anunciante from '../models/Anunciante.js';
-import { protect, authorize, checkPermission } from '../middleware/auth.js';
+// import { protect, authorize, checkPermission } from '../middleware/auth.js'; // Deshabilitado - endpoints públicos
 
 const router = express.Router();
 

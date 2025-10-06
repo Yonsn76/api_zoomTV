@@ -3,7 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { body, validationResult } from 'express-validator';
-import { protect, authorize } from '../middleware/auth.js';
+// import { protect, authorize } from '../middleware/auth.js'; // Deshabilitado - endpoints públicos
 import Media from '../models/Media.js';
 import { GridFSBucket } from 'mongodb';
 import config from '../config/default.js';

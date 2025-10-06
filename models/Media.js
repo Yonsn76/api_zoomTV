@@ -34,7 +34,7 @@ const mediaSchema = new mongoose.Schema({
   uploadedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Usuario',
-    required: true
+    required: false
   },
   gridFSId: {
     type: mongoose.Schema.Types.ObjectId,

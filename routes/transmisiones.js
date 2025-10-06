@@ -1,6 +1,6 @@
 import express from 'express';
 import Transmision from '../models/Transmision.js';
-import { protect, authorize } from '../middleware/auth.js';
+// import { protect, authorize } from '../middleware/auth.js'; // Deshabilitado - endpoints públicos
 
 const router = express.Router();
 
