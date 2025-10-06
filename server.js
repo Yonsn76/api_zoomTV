@@ -86,10 +86,10 @@ app.use('/api/autores', autoresRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/programacion', programacionRoutes);
+app.use('/api/horario', programacionRoutes);
 app.use('/api/anunciantes', anunciantesRoutes);
 app.use('/api/company', companyRoutes);
-app.use('/api/transmisiones', transmisionesRoutes);
+app.use('/api/urlLive', transmisionesRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
