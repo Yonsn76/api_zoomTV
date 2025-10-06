@@ -192,7 +192,7 @@ router.post('/', programacionValidation, async (req, res) => {
     
     const programacion = new Programacion({
       ...req.body,
-      createdBy: req.user.id
+      createdBy: req.body.createdBy || null
     });
     
     await programacion.save();

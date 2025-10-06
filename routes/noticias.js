@@ -213,7 +213,7 @@ router.post('/', [
 
     const noticiaData = {
       ...req.body,
-      author: req.user.fullName || req.user.username
+      author: req.body.author || 'Sistema'
     };
 
     // Set publishedAt if status is published

@@ -104,7 +104,7 @@ router.post('/', async (req, res) => {
     const transmision = await Transmision.create({
       nombre,
       url,
-      createdBy: req.user.id
+      createdBy: req.body.createdBy || null
     });
 
     res.status(201).json({

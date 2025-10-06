@@ -181,13 +181,13 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
-    // Prevent admin from deleting themselves
-    if (usuario._id.toString() === req.user.id) {
-      return res.status(400).json({
-        success: false,
-        message: 'No puedes eliminar tu propia cuenta'
-      });
-    }
+    // Prevent admin from deleting themselves (ahora es público)
+    // if (usuario._id.toString() === req.user.id) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'No puedes eliminar tu propia cuenta'
+    //   });
+    // }
 
     await usuario.deleteOne();
 
@@ -218,13 +218,13 @@ router.put('/:id/toggle-status', async (req, res) => {
       });
     }
 
-    // Prevent admin from deactivating themselves
-    if (usuario._id.toString() === req.user.id) {
-      return res.status(400).json({
-        success: false,
-        message: 'No puedes desactivar tu propia cuenta'
-      });
-    }
+    // Prevent admin from deactivating themselves (ahora es público)
+    // if (usuario._id.toString() === req.user.id) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'No puedes desactivar tu propia cuenta'
+    //   });
+    // }
 
     usuario.active = !usuario.active;
     await usuario.save();

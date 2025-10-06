@@ -139,7 +139,7 @@ router.post('/upload', upload.single('file'), [
       metadata: {
         originalName: req.file.originalname,
         mimeType: req.file.mimetype,
-        uploadedBy: req.user.id,
+        uploadedBy: req.body.uploadedBy || null,
         alt: req.body.alt || '',
         caption: req.body.caption || ''
       }
@@ -163,7 +163,7 @@ router.post('/upload', upload.single('file'), [
       mimeType: req.file.mimetype,
       alt: req.body.alt || '',
       caption: req.body.caption || '',
-      uploadedBy: req.user.id,
+      uploadedBy: req.body.uploadedBy || null,
       gridFSId: uploadStream.id
     });
 
@@ -223,7 +223,7 @@ router.post('/upload-multiple', upload.array('files', 100), [
         metadata: {
           originalName: file.originalname,
           mimeType: file.mimetype,
-          uploadedBy: req.user.id,
+          uploadedBy: req.body.uploadedBy || null,
           alt: req.body.alt || '',
           caption: req.body.caption || ''
         }
@@ -247,7 +247,7 @@ router.post('/upload-multiple', upload.array('files', 100), [
         mimeType: file.mimetype,
         alt: req.body.alt || '',
         caption: req.body.caption || '',
-        uploadedBy: req.user.id,
+        uploadedBy: req.body.uploadedBy || null,
         gridFSId: uploadStream.id
       });
 
@@ -286,13 +286,13 @@ router.delete('/:filename', async (req, res) => {
       });
     }
 
-    // Verificar permisos (solo el propietario o admin puede eliminar)
-    if (media.uploadedBy.toString() !== req.user.id && req.user.role !== 'admin') {
-      return res.status(403).json({
-        success: false,
-        message: 'No tienes permisos para eliminar este archivo'
-      });
-    }
+    // Verificar permisos (ahora es público)
+    // if (media.uploadedBy.toString() !== req.user.id && req.user.role !== 'admin') {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: 'No tienes permisos para eliminar este archivo'
+    //   });
+    // }
 
     // Eliminar archivo de GridFS si existe
     if (media.gridFSId) {
