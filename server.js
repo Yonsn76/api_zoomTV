@@ -118,7 +118,6 @@ const connectDB = async () => {
       maxPoolSize: 50, // Mantener hasta 50 conexiones en el pool
       serverSelectionTimeoutMS: 5000, // Mantener intentando por 5 segundos
       socketTimeoutMS: 45000, // Cerrar sockets después de 45 segundos de inactividad
-      bufferMaxEntries: 0, // Deshabilitar buffering
       bufferCommands: false, // Deshabilitar buffering de comandos
     });
     console.log(`MongoDB Connected: ${conn.connection.host}`);

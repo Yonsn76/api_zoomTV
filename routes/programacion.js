@@ -36,10 +36,12 @@ const programacionValidation = [
   
   body('description')
     .optional()
+    .isLength({ max: 500 })
     .withMessage('La descripción no puede exceder 500 caracteres'),
   
   body('notes')
     .optional()
+    .isLength({ max: 1000 })
     .withMessage('Las notas no pueden exceder 1000 caracteres'),
   
   body('priority')
