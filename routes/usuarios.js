@@ -9,8 +9,6 @@ const router = express.Router();
 // @route   GET /api/usuarios
 // @access  Private (Admin only)
 router.get('/', protect, authorize('admin'), [
-  query('page').optional().isInt({ min: 1 }).withMessage('Página debe ser un número mayor a 0'),
-  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Límite debe estar entre 1 y 50'),
   query('role').optional().isIn(['admin', 'editor', 'author']).withMessage('Rol inválido'),
   query('active').optional().isBoolean().withMessage('Active debe ser booleano')
 ], async (req, res) => {
@@ -23,9 +21,6 @@ router.get('/', protect, authorize('admin'), [
       });
     }
 
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
 
     // Build query
     const query = {};
@@ -38,24 +33,15 @@ router.get('/', protect, authorize('admin'), [
       query.active = req.query.active === 'true';
     }
 
-    // Execute query
+    // Execute query - SIN LÍMITES
     const usuarios = await Usuario.find(query)
       .select('-password')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    const total = await Usuario.countDocuments(query);
+      .sort({ createdAt: -1 });
 
     res.json({
       success: true,
       data: usuarios,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
+      count: usuarios.length
     });
   } catch (error) {
     console.error('Get usuarios error:', error);
@@ -97,14 +83,14 @@ router.get('/:id', protect, authorize('admin'), async (req, res) => {
 // @route   PUT /api/usuarios/:id
 // @access  Private (Admin only)
 router.put('/:id', protect, authorize('admin'), [
-  body('username').optional().isLength({ min: 3, max: 30 }).withMessage('El nombre de usuario debe tener entre 3 y 30 caracteres'),
+  body('username').optional().isLength({ min: 3 }).withMessage('El nombre de usuario debe tener al menos 3 caracteres'),
   body('email').optional().isEmail().withMessage('Email inválido'),
   body('role').optional().isIn(['admin', 'editor', 'author']).withMessage('Rol inválido'),
   body('permissions').optional().isArray().withMessage('Permissions debe ser un array'),
   body('active').optional().isBoolean().withMessage('Active debe ser booleano'),
   body('profile.firstName').optional().trim(),
   body('profile.lastName').optional().trim(),
-  body('profile.bio').optional().trim().isLength({ max: 500 }).withMessage('La biografía no puede tener más de 500 caracteres'),
+  body('profile.bio').optional().trim(),
   body('profile.phone').optional().trim()
 ], async (req, res) => {
   try {

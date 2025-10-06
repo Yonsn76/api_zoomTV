@@ -40,8 +40,7 @@ const upload = multer({
 // @access  Private
 router.get('/', protect, async (req, res) => {
   try {
-    const { page = 1, limit = 20, search, type } = req.query;
-    const skip = (page - 1) * limit;
+    const { search, type } = req.query;
 
     // Construir filtros
     const filters = { isActive: true };
@@ -62,16 +61,11 @@ router.get('/', protect, async (req, res) => {
       }
     }
 
-    // Obtener archivos de la base de datos
+    // Obtener archivos de la base de datos - SIN LÍMITES
     const files = await Media.find(filters)
       .populate('uploadedBy', 'username email fullName')
       .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit))
       .select('-fileData'); // No incluir los datos del archivo
-
-    // Contar total de archivos
-    const total = await Media.countDocuments(filters);
 
     // Calcular estadísticas
     const stats = await Media.aggregate([
@@ -94,12 +88,7 @@ router.get('/', protect, async (req, res) => {
     res.json({
       success: true,
       data: files,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / limit)
-      },
+      count: files.length,
       stats: stats[0] || {
         totalSize: 0,
         totalFiles: 0,
@@ -200,7 +189,7 @@ router.post('/upload', protect, upload.single('file'), [
 // @desc    Subir múltiples archivos
 // @route   POST /api/media/upload-multiple
 // @access  Private
-router.post('/upload-multiple', protect, upload.array('files', 10), [
+router.post('/upload-multiple', protect, upload.array('files', 100), [
   body('alt').optional().trim(),
   body('caption').optional().trim()
 ], async (req, res) => {

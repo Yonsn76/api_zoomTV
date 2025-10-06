@@ -9,7 +9,7 @@ const router = express.Router();
 const programacionValidation = [
   body('title')
     .trim()
-    .isLength({ min: 1, max: 200 })
+    .isLength({ min: 1 })
     .withMessage('El título es obligatorio y no puede exceder 200 caracteres'),
   
   body('day')
@@ -36,12 +36,10 @@ const programacionValidation = [
   
   body('description')
     .optional()
-    .isLength({ max: 500 })
     .withMessage('La descripción no puede exceder 500 caracteres'),
   
   body('notes')
     .optional()
-    .isLength({ max: 1000 })
     .withMessage('Las notas no pueden exceder 1000 caracteres'),
   
   body('priority')

@@ -31,9 +31,16 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Security middleware
-app.use(helmet());
-app.use(compression());
+// Security middleware - Configurado para permitir muchas peticiones
+app.use(helmet({
+  contentSecurityPolicy: false, // Deshabilitar CSP para evitar bloqueos
+  crossOriginEmbedderPolicy: false, // Deshabilitar COEP
+  crossOriginOpenerPolicy: false, // Deshabilitar COOP
+}));
+app.use(compression({
+  level: 1, // Compresión mínima para mejor rendimiento
+  threshold: 1024, // Solo comprimir archivos > 1KB
+}));
 
 // CORS configuration - Allow all origins
 app.use(cors({
@@ -57,17 +64,17 @@ app.use((req, res, next) => {
   }
 });
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: config.rateLimit.windowMs,
-  max: config.rateLimit.maxRequests,
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api/', limiter);
+// Rate limiting - DESHABILITADO para evitar errores con muchas peticiones
+// const limiter = rateLimit({
+//   windowMs: config.rateLimit.windowMs,
+//   max: config.rateLimit.maxRequests,
+//   message: 'Too many requests from this IP, please try again later.'
+// });
+// app.use('/api/', limiter);
 
 // Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -107,7 +114,13 @@ app.use('*', (req, res) => {
 // Connect to MongoDB
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(config.mongodb.uri);
+    const conn = await mongoose.connect(config.mongodb.uri, {
+      maxPoolSize: 50, // Mantener hasta 50 conexiones en el pool
+      serverSelectionTimeoutMS: 5000, // Mantener intentando por 5 segundos
+      socketTimeoutMS: 45000, // Cerrar sockets después de 45 segundos de inactividad
+      bufferMaxEntries: 0, // Deshabilitar buffering
+      bufferCommands: false, // Deshabilitar buffering de comandos
+    });
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error('Error connecting to MongoDB:', error.message);
@@ -119,10 +132,20 @@ const connectDB = async () => {
 const PORT = config.server.port;
 const startServer = async () => {
   await connectDB();
-  app.listen(PORT, () => {
+  
+  // Configuraciones adicionales para manejar muchas peticiones
+  app.set('trust proxy', 1); // Para manejar proxies correctamente
+  app.disable('x-powered-by'); // Ocultar información del servidor
+  
+  const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Environment: ${config.server.env}`);
   });
+  
+  // Configuraciones del servidor para manejar muchas conexiones
+  server.keepAliveTimeout = 65000; // Mantener conexiones vivas por 65 segundos
+  server.headersTimeout = 66000; // Timeout para headers por 66 segundos
+  server.maxConnections = 1000; // Máximo 1000 conexiones simultáneas
 };
 
 startServer().catch(console.error);

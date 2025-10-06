@@ -9,8 +9,6 @@ const router = express.Router();
 // @route   GET /api/noticias
 // @access  Public
 router.get('/', [
-  query('page').optional().isInt({ min: 1 }).withMessage('Página debe ser un número mayor a 0'),
-  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Límite debe estar entre 1 y 50'),
   query('category').optional().isIn(['actualidad', 'deportes', 'musica', 'nacionales', 'regionales']).withMessage('Categoría inválida'),
   query('status').optional().isIn(['published', 'draft', 'archived']).withMessage('Estado inválido'),
   query('search').optional().trim()
@@ -24,9 +22,6 @@ router.get('/', [
       });
     }
 
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
 
     // Build query
     const query = {};
@@ -46,23 +41,14 @@ router.get('/', [
       query.$text = { $search: req.query.search };
     }
 
-    // Execute query
+    // Execute query - SIN LÍMITES
     const noticias = await Noticia.find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    const total = await Noticia.countDocuments(query);
+      .sort({ createdAt: -1 });
 
     res.json({
       success: true,
       data: noticias,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
+      count: noticias.length
     });
   } catch (error) {
     console.error('Get noticias error:', error);
@@ -114,8 +100,7 @@ router.get('/:id', async (req, res) => {
 // @access  Public
 router.get('/featured/featured', async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 5;
-    const noticias = await Noticia.getFeatured(limit);
+    const noticias = await Noticia.getFeatured();
 
     res.json({
       success: true,
@@ -133,9 +118,7 @@ router.get('/featured/featured', async (req, res) => {
 // @desc    Obtener noticias por categoría (público)
 // @route   GET /api/noticias/category/:category
 // @access  Public
-router.get('/category/:category', [
-  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Límite debe estar entre 1 y 50')
-], async (req, res) => {
+router.get('/category/:category', async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -146,9 +129,7 @@ router.get('/category/:category', [
     }
 
     const { category } = req.params;
-    const limit = parseInt(req.query.limit) || 10;
-
-    const noticias = await Noticia.getByCategory(category, limit);
+    const noticias = await Noticia.getByCategory(category);
 
     res.json({
       success: true,
@@ -167,8 +148,7 @@ router.get('/category/:category', [
 // @route   GET /api/noticias/search/search
 // @access  Public
 router.get('/search/search', [
-  query('q').notEmpty().withMessage('Query de búsqueda requerida'),
-  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Límite debe estar entre 1 y 50')
+  query('q').notEmpty().withMessage('Query de búsqueda requerida')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -180,9 +160,7 @@ router.get('/search/search', [
     }
 
     const { q } = req.query;
-    const limit = parseInt(req.query.limit) || 10;
-
-    const noticias = await Noticia.search(q, limit);
+    const noticias = await Noticia.search(q);
 
     res.json({
       success: true,

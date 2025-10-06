@@ -89,7 +89,7 @@ router.post('/login', [
 // @access  Private (Admin only)
 router.post('/register', protect, authorize('admin'), [
   body('username')
-    .isLength({ min: 3, max: 30 })
+    .isLength({ min: 3 })
     .withMessage('El nombre de usuario debe tener entre 3 y 30 caracteres'),
   body('email').isEmail().withMessage('Email inválido'),
   body('password')
@@ -187,7 +187,7 @@ router.get('/me', protect, async (req, res) => {
 router.put('/profile', protect, [
   body('profile.firstName').optional().trim(),
   body('profile.lastName').optional().trim(),
-  body('profile.bio').optional().trim().isLength({ max: 500 }).withMessage('La biografía no puede tener más de 500 caracteres'),
+  body('profile.bio').optional().trim(),
   body('profile.phone').optional().trim()
 ], async (req, res) => {
   try {

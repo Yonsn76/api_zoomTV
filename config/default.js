@@ -29,9 +29,9 @@ export default {
     origin: process.env.CORS_ORIGIN || '*'
   },
 
-  // Rate Limiting
+  // Rate Limiting - Deshabilitado para evitar errores con muchas peticiones
   rateLimit: {
-    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000, // 15 minutes
-    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 60000, // 1 minuto
+    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 1000000 // Prácticamente ilimitado
   }
 };

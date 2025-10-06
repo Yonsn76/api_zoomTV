@@ -11,7 +11,6 @@ const router = express.Router();
 router.get('/', [
   query('status').optional().isIn(['active', 'inactive', 'pending']).withMessage('Estado inválido'),
   query('category').optional().trim(),
-  query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Límite debe estar entre 1 y 50')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -22,7 +21,6 @@ router.get('/', [
       });
     }
 
-    const limit = parseInt(req.query.limit) || 20;
     
     // Build query
     const query = {};
@@ -38,10 +36,9 @@ router.get('/', [
       query.category = req.query.category;
     }
 
-    // Execute query
+    // Execute query - SIN LÍMITES
     const anunciantes = await Anunciante.find(query)
-      .sort({ priority: 1, createdAt: -1 })
-      .limit(limit);
+      .sort({ priority: 1, createdAt: -1 });
 
     res.json({
       success: true,
@@ -96,14 +93,14 @@ router.get('/:id', async (req, res) => {
 router.post('/', [
   protect,
   authorize('admin', 'editor'),
-  body('name').trim().isLength({ min: 1, max: 100 }).withMessage('El nombre es requerido y debe tener entre 1 y 100 caracteres'),
+  body('name').trim().isLength({ min: 1 }).withMessage('El nombre es requerido'),
   body('imageUrl').trim().isURL().withMessage('La URL de la imagen es requerida y debe ser válida'),
-  body('description').optional().trim().isLength({ max: 500 }).withMessage('La descripción no puede tener más de 500 caracteres'),
+  body('description').optional().trim(),
   body('isFlyer').optional().isBoolean().withMessage('isFlyer debe ser un valor booleano'),
   body('enableZoom').optional().isBoolean().withMessage('enableZoom debe ser un valor booleano'),
   body('status').optional().isIn(['active', 'inactive', 'pending']).withMessage('Estado inválido'),
   body('priority').optional().isInt({ min: 0 }).withMessage('La prioridad debe ser un número mayor o igual a 0'),
-  body('category').optional().trim().isLength({ max: 50 }).withMessage('La categoría no puede tener más de 50 caracteres'),
+  body('category').optional().trim(),
   body('contactInfo.email').optional().isEmail().withMessage('Email inválido'),
   body('contactInfo.phone').optional().trim(),
   body('contactInfo.website').optional().isURL().withMessage('URL del sitio web inválida'),
@@ -142,14 +139,14 @@ router.post('/', [
 router.put('/:id', [
   protect,
   authorize('admin', 'editor'),
-  body('name').optional().trim().isLength({ min: 1, max: 100 }).withMessage('El nombre debe tener entre 1 y 100 caracteres'),
+  body('name').optional().trim().isLength({ min: 1 }).withMessage('El nombre debe tener al menos 1 carácter'),
   body('imageUrl').optional().trim().isURL().withMessage('La URL de la imagen debe ser válida'),
-  body('description').optional().trim().isLength({ max: 500 }).withMessage('La descripción no puede tener más de 500 caracteres'),
+  body('description').optional().trim(),
   body('isFlyer').optional().isBoolean().withMessage('isFlyer debe ser un valor booleano'),
   body('enableZoom').optional().isBoolean().withMessage('enableZoom debe ser un valor booleano'),
   body('status').optional().isIn(['active', 'inactive', 'pending']).withMessage('Estado inválido'),
   body('priority').optional().isInt({ min: 0 }).withMessage('La prioridad debe ser un número mayor o igual a 0'),
-  body('category').optional().trim().isLength({ max: 50 }).withMessage('La categoría no puede tener más de 50 caracteres'),
+  body('category').optional().trim(),
   body('contactInfo.email').optional().isEmail().withMessage('Email inválido'),
   body('contactInfo.phone').optional().trim(),
   body('contactInfo.website').optional().isURL().withMessage('URL del sitio web inválida'),

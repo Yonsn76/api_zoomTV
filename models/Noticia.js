@@ -125,34 +125,31 @@ noticiaSchema.methods.archive = function() {
   return this.save();
 };
 
-// Método estático para obtener noticias destacadas
-noticiaSchema.statics.getFeatured = function(limit = 5) {
+// Método estático para obtener noticias destacadas - SIN LÍMITES
+noticiaSchema.statics.getFeatured = function() {
   return this.find({ 
     status: 'published', 
     featured: true 
   })
-  .sort({ createdAt: -1 })
-  .limit(limit);
+  .sort({ createdAt: -1 });
 };
 
-// Método estático para obtener noticias por categoría
-noticiaSchema.statics.getByCategory = function(category, limit = 10) {
+// Método estático para obtener noticias por categoría - SIN LÍMITES
+noticiaSchema.statics.getByCategory = function(category) {
   return this.find({ 
     status: 'published', 
     category: category 
   })
-  .sort({ createdAt: -1 })
-  .limit(limit);
+  .sort({ createdAt: -1 });
 };
 
-// Método estático para buscar noticias
-noticiaSchema.statics.search = function(query, limit = 10) {
+// Método estático para buscar noticias - SIN LÍMITES
+noticiaSchema.statics.search = function(query) {
   return this.find({
     $text: { $search: query },
     status: 'published'
   })
-  .sort({ score: { $meta: 'textScore' } })
-  .limit(limit);
+  .sort({ score: { $meta: 'textScore' } });
 };
 
 const Noticia = mongoose.model('Noticia', noticiaSchema);
